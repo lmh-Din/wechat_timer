@@ -1,8 +1,10 @@
 package com.wechat.timer;
 
+import com.wechat.timer.config.entity.GetURL;
 import com.wechat.timer.exception.AesException;
 import com.wechat.timer.util.SHA1;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +21,10 @@ public class WechatTimerApplication implements CommandLineRunner{
 	@Value("${wechat.token}")
 	private String tokenValue;
 
+	@Autowired
+	private GetURL getURL;
+
+
 	public static void main(String[] args) {
 		SpringApplication.run(WechatTimerApplication.class, args);
 
@@ -30,7 +36,6 @@ public class WechatTimerApplication implements CommandLineRunner{
 	}
 
 	private void logMsg(){
-		log.info("Token:{}", tokenValue);
 		log.info("Running......");
 	}
 
