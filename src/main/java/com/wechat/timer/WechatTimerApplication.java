@@ -10,8 +10,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.Charset;
 
 @SpringBootApplication
 @RestController
@@ -48,7 +54,7 @@ public class WechatTimerApplication implements CommandLineRunner{
 	 * @param echostr	随机字符串
 	 * @return
 	 */
-	@GetMapping("/checksignature")
+	@GetMapping("/")
 	public String checkSignature(@RequestParam(name = "signature") String signature,
 								  @RequestParam(name = "timestamp") String timestamp,
 								  @RequestParam(name = "nonce") String nonce,
@@ -66,6 +72,21 @@ public class WechatTimerApplication implements CommandLineRunner{
 			log.error("签名校验失败", e);
 		}
 		return reMsg;
+	}
+
+	@PostMapping("/")
+	public void postMsg(HttpServletRequest request, HttpServletResponse response){
+		try {
+			ServletInputStream servletInputStream = request.getInputStream();
+			byte[] bytes = new byte[1024];
+			while (servletInputStream.read(bytes) != -1){
+				String postMsg = new String(bytes, Charset.defaultCharset());
+				System.out.println(postMsg);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
